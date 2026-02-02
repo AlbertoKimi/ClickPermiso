@@ -1,25 +1,16 @@
-
-import { LogOut } from 'lucide-react'
-import './App.css'
-import { Header } from './componentes/Header'
-import { MenuLateral } from './componentes/Menu_Lateral'
-import { Formulario } from './componentes/Formulario'
+import { MenuLateral } from "./componentes/Menu_Lateral"; 
+import { Rutas } from "./componentes/Rutas"; 
 
 function App() {
-
   return (
-    <div className="flex h-screen bg-gray-100 overflow-hidden">
-      <MenuLateral></MenuLateral>
-      <div className="flex flex-col flex-1">
-        <Header titulo="I.E.S. ALBARREGAS" texto="Hola, Prof.Borja" icono={LogOut} estiloExtra='h-20 border-b-2 border-amber-950'></Header>
-        <main className=" p-8 h-full flex flex-col justify-center items-center gap-4 bg-white m-4 rounded-lg shadow-lg">
-
-          <Formulario></Formulario>
-
-        </main>
+    <div className="flex h-screen bg-slate-100 w-full">
+      <MenuLateral />
+      <div className="flex-1 h-full overflow-y-auto p-10">
+        <Rutas />
+        
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

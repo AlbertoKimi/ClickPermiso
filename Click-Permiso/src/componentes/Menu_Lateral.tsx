@@ -1,9 +1,7 @@
-import { Map, Users, Calendar, UserCog } from 'lucide-react';
-import { ItemLateral } from './ItemsLateral';
-import { useState } from 'react';
+import { NavLink } from "react-router-dom";
+
 
 export const MenuLateral = () => {
-    const [seccionActiva, setSeccionActiva] = useState('mi-perfil');
 
     return (
         <aside className="w-64 bg-white border-r-2 border-slate-200 flex flex-col shadow-xl z-20">
@@ -17,47 +15,26 @@ export const MenuLateral = () => {
 
             <nav className="border-t-0 flex flex-col gap-4 p-4 space-y-1 overflow-y-auto">
 
-                <ItemLateral
-                    icon={Map}
-                    label="Sol. Día Diurno"
-                    active={seccionActiva === 'dia-diurno'}
-                    onClick={() => setSeccionActiva('dia-diurno')}
-                />
+                <NavLink
+                    to="/solicitar-diurno"
+                >Sol. dia diurno</NavLink>
 
-                <ItemLateral
-                    icon={Map}
-                    label="Sol. Día Diurno"
-                    active={seccionActiva === 'sol-diurno'}
-                    onClick={() => setSeccionActiva('sol-diurno')}
-                />
+                <NavLink
+                    to="/solicitar-nocturno"
+                > Sol. dia nocturno</NavLink>
 
-                <ItemLateral
-                    icon={Users}
-                    label="Sol. Día Vespertino"
-                    active={seccionActiva === 'sol-vespertino'}
-                    onClick={() => setSeccionActiva('sol-vespertino')}
-                />
+                <NavLink
+                    to="/perfil"
+                > Mi Perfil</NavLink>
 
-                <ItemLateral
-                    icon={Calendar}
-                    label="Mi Perfil"
-                    active={seccionActiva === 'mi-perfil'}
-                    onClick={() => setSeccionActiva('mi-perfil')}
-                />
+                <NavLink
+                    to="/solicitado"
+                >Mis dias solicitados</NavLink>
 
-                <ItemLateral
-                    icon={UserCog}
-                    label="Mis Días Solicitados"
-                    active={seccionActiva === 'dias-solicitados'}
-                    onClick={() => setSeccionActiva('dias-solicitados')}
-                />
+                <NavLink
+                    to="/ausencia"
+                >Mis ausencias</NavLink>
 
-                <ItemLateral
-                    icon={UserCog}
-                    label="Mis Ausencias"
-                    active={seccionActiva === 'ausencias'}
-                    onClick={() => setSeccionActiva('ausencias')}
-                />
 
             </nav>
 
