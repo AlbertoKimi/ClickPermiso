@@ -119,7 +119,7 @@ export const Formulario = () => {
                         <ItemsCheck
                             label="Estoy solicitando un día de permiso no retribuido"
                             name={"permisoR"}
-                            checked={false}
+                            checked={Boolean(formData.permisoR)}
                             onChange={manejarCambio}>
                         </ItemsCheck>
                     </div>
