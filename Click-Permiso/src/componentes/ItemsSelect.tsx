@@ -9,8 +9,8 @@ interface ItemsSelectProps {
     label: string
     name: string
     value: string
-    options: Option[] 
-    placeholder?: string 
+    options: Option[]
+    placeholder?: string
     onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
     error?: string
     required?: boolean
@@ -21,7 +21,7 @@ export const ItemsSelect = ({ label, name, value, options, placeholder, onChange
     const [smError, setSmError] = useState(false)
 
     const handleBlur = () => {
-        
+
         if (required && value === "") {
             setSmError(true);
         } else {
@@ -30,8 +30,8 @@ export const ItemsSelect = ({ label, name, value, options, placeholder, onChange
     };
 
     const handleChangeInternal = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setSmError(false); 
-        onChange(e);       
+        setSmError(false);
+        onChange(e);
     };
 
     const baseClasses = "w-full border-gray-300 rounded-md shadow-sm p-3 text-gray-700 focus:border-blue-500 focus:ring-blue-500 bg-white"
@@ -40,7 +40,7 @@ export const ItemsSelect = ({ label, name, value, options, placeholder, onChange
     return (
         <div className="grupo-input mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
-            
+
             <select
                 name={name}
                 value={value}

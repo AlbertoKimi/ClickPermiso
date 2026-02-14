@@ -9,7 +9,7 @@ interface HeaderProps {
 
 export const Header = ({ titulo, texto, icono: Icono, estiloExtra }: HeaderProps) => {
     return (
-        <header className={`flex items-center justify-between px-6 bg-white ${estiloExtra}`}>
+        <header className={`flex items-center justify-between px-6 bg-white h-20 border-b-2 border-slate-100 ${estiloExtra}`}>
             <h1 className="text-xl font-bold text-gray-900">
                 {titulo}
             </h1>

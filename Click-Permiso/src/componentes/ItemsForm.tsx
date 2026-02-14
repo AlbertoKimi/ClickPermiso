@@ -1,21 +1,21 @@
 import { useState } from "react"
 
 interface ItemsFormProps {
-    label: string,
-    input: string,
-    name: string,
-    value: string,
-    placeholder: string,
-    onChange: (valorInput:string)=>void,
-    regex : RegExp,
-    error: string 
+  label: string,
+  input: string,
+  name: string,
+  value: string,
+  placeholder: string,
+  onChange: (valorInput: string) => void,
+  regex: RegExp,
+  error: string
 }
 
-export const ItemsForm=({ label, input, name, value, placeholder, onChange, regex, error }: ItemsFormProps) => {
+export const ItemsForm = ({ label, input, name, value, placeholder, onChange, regex, error }: ItemsFormProps) => {
 
-    const [smError, setsmError]= useState(false) 
+  const [smError, setsmError] = useState(false)
 
-      const handleBlur = () => {
+  const handleBlur = () => {
     if (regex) {
       if (!regex.test(value)) {
         setsmError(true);
@@ -25,13 +25,13 @@ export const ItemsForm=({ label, input, name, value, placeholder, onChange, rege
     }
   };
 
-  const handleChangeInternal = (e:any) => {
+  const handleChangeInternal = (e: any) => {
     setsmError(false);
     onChange(e); // Propagamos el evento al padre
   };
 
-    return (
-<div className="grupo-input">
+  return (
+    <div className="grupo-input">
       <label className="block text-sm font-medium text-gray-700 mb-2">{label}</label>
       <input
         type={input}
@@ -46,11 +46,10 @@ export const ItemsForm=({ label, input, name, value, placeholder, onChange, rege
       {smError && <span className="mensaje-error">{error}</span>}
     </div>
 
-    )
-}      
+  )
+}
 
 
 
 
 
-     
