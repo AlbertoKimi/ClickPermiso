@@ -5,8 +5,10 @@ import { ItemsCheck } from "./ItemsCheck"
 import { useState } from "react"
 import { Boton } from "./Boton"
 import { ItemsSelect } from "./ItemsSelect"
+import { supabase } from "../utils/supabaseClient"
 
 export const Formulario = () => {
+
     const [formData, setFormData] = useState({
         solicitado: '',
         telefono: '',
@@ -14,8 +16,12 @@ export const Formulario = () => {
         turno: '',
         numHoras: '',
         numDias: '',
-        permisoR: ''
+        permisoR: false
     });
+
+    const [enviando, setEnviando] = useState(false);
+    const [exito, setExito] = useState(false);
+    const [errorMsg, setErrorMsg] = useState('');
 
     const opcionesJornada = [
         { value: "completa", label: "Completa" },
@@ -35,17 +41,87 @@ export const Formulario = () => {
         });
     };
 
-    const manejarEnvio = (e: any) => {
+    // Convierte dd/mm/yyyy → yyyy-mm-dd (formato que acepta Supabase)
+    const convertirFecha = (fecha: string): string => {
+        const partes = fecha.split('/');
+        if (partes.length !== 3) return fecha;
+        const [dia, mes, anio] = partes;
+        return `${anio}-${mes}-${dia}`;
+    };
+
+    const manejarEnvio = async (e: any) => {
         e.preventDefault();
-        console.log("Datos enviados:", formData);
-        alert("Formulario enviado con éxito");
+        setEnviando(true);
+        setErrorMsg('');
+        setExito(false);
+
+        try {
+            const { error } = await supabase
+                .from('DiaSolicitado')
+                .insert([{
+                    DiaSolicitado: convertirFecha(formData.solicitado),
+                    telefono: Number(formData.telefono),
+                    jornada: formData.jornada,
+                    turno: formData.turno,
+                    horas_afectadas: Number(formData.numHoras),
+                    dias_solicitados: Number(formData.numDias),
+                }]);
+
+            if (error) {
+                console.error('Error al insertar:', error);
+                setErrorMsg(`Error: ${error.message}`);
+            } else {
+                setExito(true);
+                // Limpiamos el formulario
+                setFormData({
+                    solicitado: '',
+                    telefono: '',
+                    jornada: '',
+                    turno: '',
+                    numHoras: '',
+                    numDias: '',
+                    permisoR: false
+                });
+            }
+        } catch (err) {
+            console.error('Error inesperado:', err);
+            setErrorMsg('Error inesperado al enviar el formulario.');
+        } finally {
+            setEnviando(false);
+        }
+    };
+
+    const manejarCancelar = () => {
+        setFormData({
+            solicitado: '',
+            telefono: '',
+            jornada: '',
+            turno: '',
+            numHoras: '',
+            numDias: '',
+            permisoR: false
+        });
+        setExito(false);
+        setErrorMsg('');
     };
 
     return (
         <div className=" bg-gray-50 p-6 flex flex-col justify-center">
             <div className="max-w-5xl mx-auto bg-white p-8 rounded-lg shadow-sm">
                 <Header titulo={`Día Solicitado: ${formData.solicitado}`} texto="Volver" icono={Undo2} estiloExtra="border-b-2 border-gray-100 mb-6 py-6"></Header>
-                <form className="flex flex-col gap-6">
+
+                {exito && (
+                    <div className="mb-4 p-3 bg-green-100 text-green-800 rounded-lg border border-green-200">
+                        ✅ Solicitud guardada correctamente.
+                    </div>
+                )}
+                {errorMsg && (
+                    <div className="mb-4 p-3 bg-red-100 text-red-800 rounded-lg border border-red-200">
+                        ❌ {errorMsg}
+                    </div>
+                )}
+
+                <form className="flex flex-col gap-6" onSubmit={manejarEnvio}>
                     <div className="grid grid-cols-2 gap-6">
                         <ItemsForm
                             label="Día Solicitado"
@@ -56,7 +132,6 @@ export const Formulario = () => {
                             onChange={manejarCambio}
                             regex={/^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/\d{4}$/}
                             error={"No tiene el formato dd/mm/yyyy"}>
-
                         </ItemsForm>
 
                         <ItemsForm
@@ -68,7 +143,6 @@ export const Formulario = () => {
                             onChange={manejarCambio}
                             regex={/^[6-9]\d{8}$/}
                             error={"Debe empezar por 6, 7, 8 o 9 y tener 9 dígitos"}>
-
                         </ItemsForm>
 
                         <ItemsSelect
@@ -125,8 +199,16 @@ export const Formulario = () => {
                     </div>
 
                     <div className="flex justify-end gap-4 mt-6">
-                        <Boton texto="Cancelar" className="bg-gray-200 text-gray-700 hover:bg-gray-300" onClick={() => manejarEnvio}></Boton>
-                        <Boton texto="Guardar Solicitud" className="bg-blue-800 text-white hover:bg-blue-900" onClick={() => manejarEnvio}></Boton>
+                        <Boton
+                            texto="Cancelar"
+                            className="bg-gray-200 text-gray-700 hover:bg-gray-300"
+                            onClick={manejarCancelar}>
+                        </Boton>
+                        <Boton
+                            texto={enviando ? "Guardando..." : "Guardar Solicitud"}
+                            className="bg-blue-800 text-white hover:bg-blue-900"
+                            type="submit">
+                        </Boton>
                     </div>
                 </form>
             </div>
